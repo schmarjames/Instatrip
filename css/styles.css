@@ -1,0 +1,62 @@
+@import url(https://fonts.googleapis.com/css?family=Croissant+One);
+
+body {
+  background: url("http://d3thflcq1yqzn0.cloudfront.net/023555350_prevstill.jpeg");
+}
+
+#wrapper {
+  position: relative;
+}
+
+#overlay {
+  height: 100%;
+  width: 100%;
+  background: rgba(0,0,0,0.9);
+  position: absolute;
+}
+
+#search-form {
+  margin: 15% auto 0 auto;
+  width: 50%;
+}
+
+h1.title {
+  font-family: 'Croissant One', cursive;
+  font-size: 64px;
+  color: #efefef;
+  text-align: center;
+}
+
+#search-form .wrapper {
+  height: 70px;
+  background: #efefef;
+  border-radius: 5px;
+  position: relative;
+}
+
+#search-form #photo-search {
+  height: 70px;
+  width: 100%;
+  font-size: 24px;
+  background: transparent;
+}
+
+#search-form button[type=submit] {
+  width: 50px;
+  height: 50px;
+  background: transparent;
+  border: none;
+  color: #cdcdcd;
+  position: absolute;
+  top: 15%;
+  right: 2%;
+}
+
+#search-form button[type=submit] span {
+  font-size: 30px;
+}
+
+#search-form #photo-search:focus,
+#search-form button[type=submit]:focus {
+  outline: none;
+}
