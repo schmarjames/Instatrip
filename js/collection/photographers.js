@@ -21,7 +21,7 @@ define(['backbone'], function(Backbone) {
       return Backbone.sync(method, collection, options);
     },
     parse : function(data) {
-      console.log(data);
+      return data.data;
     }
   });
 

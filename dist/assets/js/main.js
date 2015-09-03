@@ -3,7 +3,12 @@ define([
   ], function(Router) {
 
   var initialize = function() {
+    console.log("app starting");
     var router = new Router();
+
+    Backbone.history.on("all", function(x,y) {
+      console.log(Backbone.history.getFragment());
+    });
   };
 
   return {
@@ -35,7 +40,8 @@ define([
 
   return Backbone.Router.extend({
     routes : {
-      ''  : 'search'
+      ''  : 'search',
+      'photos' : 'photos'
     },
 
     search : function() {
@@ -45,8 +51,15 @@ define([
 
       mainView.childView.render();
     },
+    photos : function() {
+      if (mainView.collection == undefined) {
+        this.navigate('', true);
+        return;
+      }
+      console.log("PHOTOSSSSSSSSSSSSSSSSSS");
+    },
     initialize : function() {
-      mainView = new MainView();
+      mainView = new MainView({navigate : this.navigate});
       Backbone.history.start();
     }
   });
@@ -467,7 +480,7 @@ define(['backbone'], function(Backbone) {
       return Backbone.sync(method, collection, options);
     },
     parse : function(data) {
-      console.log(data);
+      return data.data;
     }
   });
 
@@ -482,7 +495,7 @@ define(['backbone'], function(Backbone) {
     template : null,
 
     initialize : function(options) {
-      console.log("main view");
+      this.navigate = options.navigate;
     },
 
     addChildView : function(child) {
@@ -507,9 +520,10 @@ define([
   var SearchView = Backbone.View.extend({
     el : $("#wrapper"),
     template : null,
-
+    photographers : null,
+    parent : null,
     initialize : function(options) {
-      //this.el = options.parent.el;
+      this.parent = options.parent;
     },
 
     render : function() {
@@ -517,11 +531,11 @@ define([
       var search = template({});
       $(this.el).prepend(search);
 
-      photographers = {
+      this.photographers = {
         data: ["everythingeverywhere", "lozula", "elialocardi", "lostncheeseland"]
       };
 
-      $(this.el).find("#photo-search").easyAutocomplete(photographers);
+      $(this.el).find("#photo-search").easyAutocomplete(this.photographers);
     },
 
     events: {
@@ -531,16 +545,15 @@ define([
     searchPhotographer : function(e) {
       e.preventDefault();
 
-      var $target = $(e.currentTarget),
+      var that = this,
+          $target = $(e.currentTarget),
           value = $target.parent().find("#photo-search").val();
-
-      if (value !== "") {
+      if (this.photographers.data.indexOf(value) > -1) {
         photographers = new Photographers({tagName : value });
         photographers.url = 'https://api.instagram.com/v1/tags/'+value+'/media/recent?client_id=6c2064d60740476fbe93292ded2d69a7&callback=?';
-        photographers.fetch({
-          success : function(data) {
-            console.log(data);
-          }
+        photographers.fetch().done(function(data) {
+          that.parent.collection = data;
+          that.parent.navigate('photos', true);
         });
       }
 

@@ -9,7 +9,8 @@ define([
 
   return Backbone.Router.extend({
     routes : {
-      ''  : 'search'
+      ''  : 'search',
+      'photos' : 'photos'
     },
 
     search : function() {
@@ -19,8 +20,15 @@ define([
 
       mainView.childView.render();
     },
+    photos : function() {
+      if (mainView.collection == undefined) {
+        this.navigate('', true);
+        return;
+      }
+      console.log("PHOTOSSSSSSSSSSSSSSSSSS");
+    },
     initialize : function() {
-      mainView = new MainView();
+      mainView = new MainView({navigate : this.navigate});
       Backbone.history.start();
     }
   });

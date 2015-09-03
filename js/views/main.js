@@ -6,7 +6,7 @@ define(['backbone'], function(Backbone) {
     template : null,
 
     initialize : function(options) {
-      console.log("main view");
+      this.navigate = options.navigate;
     },
 
     addChildView : function(child) {

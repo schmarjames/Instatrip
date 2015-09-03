@@ -9,9 +9,10 @@ define([
   var SearchView = Backbone.View.extend({
     el : $("#wrapper"),
     template : null,
-
+    photographers : null,
+    parent : null,
     initialize : function(options) {
-      //this.el = options.parent.el;
+      this.parent = options.parent;
     },
 
     render : function() {
@@ -19,11 +20,11 @@ define([
       var search = template({});
       $(this.el).prepend(search);
 
-      photographers = {
+      this.photographers = {
         data: ["everythingeverywhere", "lozula", "elialocardi", "lostncheeseland"]
       };
 
-      $(this.el).find("#photo-search").easyAutocomplete(photographers);
+      $(this.el).find("#photo-search").easyAutocomplete(this.photographers);
     },
 
     events: {
@@ -33,16 +34,15 @@ define([
     searchPhotographer : function(e) {
       e.preventDefault();
 
-      var $target = $(e.currentTarget),
+      var that = this,
+          $target = $(e.currentTarget),
           value = $target.parent().find("#photo-search").val();
-
-      if (value !== "") {
+      if (this.photographers.data.indexOf(value) > -1) {
         photographers = new Photographers({tagName : value });
         photographers.url = 'https://api.instagram.com/v1/tags/'+value+'/media/recent?client_id=6c2064d60740476fbe93292ded2d69a7&callback=?';
-        photographers.fetch({
-          success : function(data) {
-            console.log(data);
-          }
+        photographers.fetch().done(function(data) {
+          that.parent.collection = data;
+          that.parent.navigate('photos', true);
         });
       }
 
