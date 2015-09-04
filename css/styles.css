@@ -15,6 +15,37 @@ body {
   position: absolute;
 }
 
+#dashboard {
+  width: 50%;
+  height: 50px;
+  padding: 10px;
+  color: #efefef;
+}
+
+#dashboard .like-data {
+  position: relative;
+  font-family: 'Croissant One', cursive;
+}
+
+#dashboard .like-data .like {
+  position: absolute;
+  right: 2%;
+  margin-top: 1px;
+  display: block;
+  font-size: 28px
+}
+
+#dashboard .like-data .like-num {
+  font-size: 28px;
+  position: absolute;
+  top: 2%;
+  right: 20%;
+}
+
+#dashboard .like-data .like span {
+  font-size: 40px;
+}
+
 #search-form {
   margin: 15% auto 0 auto;
   width: 50%;
@@ -62,4 +93,33 @@ h1.title {
 #search-form #photo-search:focus,
 #search-form button[type=submit]:focus {
   outline: none;
+}
+
+
+#photo-list-wrapper {
+  width: 50%;
+  height: 685px;
+  margin: 5% auto;
+  overflow-y: scroll;
+}
+
+.image-section {
+  padding: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.image-section img {
+  width: 100%;
+  border-radius: 3px;
+}
+
+.image-section .like {
+  width: 20px;
+  height: 20px;
+  display: block;
+  position: absolute;
+  right: 4%;
+  top: 4%;
+  color: red;
 }

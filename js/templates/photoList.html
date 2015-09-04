@@ -1,4 +1,28 @@
-<%  %>
-<div class="row">
-  <div class="col-md-4">.col-md-4</div>
+<div id="photo-list-wrapper">
+  <div class="photo-section container-fluid">
+<%
+  _.each(photos, function(photo) {
+    if (count === 0) {
+%>
+      <div class="row">
+<%
+    }
+%>
+    <div class="col-md-4">
+      <div class="image-section" data-id=<%= photo.id %>>
+        <span class="like glyphicon glyphicon-heart-empty" aria-hidden="true"></span>
+        <img src=<%= photo.url %> />
+      </div>
+    </div>
+<%
+    count++;
+    if (count === 3) {
+%>
+      </div>
+<%
+      count = 0;
+    }
+%>
+<% }); %>
+  </div>
 </div>

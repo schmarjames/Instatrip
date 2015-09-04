@@ -1,4 +1,9 @@
-define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
+define([
+  'jquery',
+  'underscore',
+  'backbone',
+  '../text!../templates/photoList.html'
+  ], function($, _, Backbone, PhotoListTemplate) {
   var PhotoList = Backbone.View.extend({
     el : $("#wrapper"),
     initialize : function(options) {
@@ -11,12 +16,17 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
       this.parent.collection.each(function(model) {
         var data = model.attributes,
             obj = {};
-        obj["url"] = data.images.standard_resolution.url;
-        obj["id"] = data.id;
+        obj.url = data.images.standard_resolution.url;
+        obj.id = data.id;
+        obj.likesTotal = data.likes.count;
         photos.push(obj);
       });
 
       console.log(photos);
+
+      var template = _.template(PhotoListTemplate);
+      var data = template({_:_, photos : photos, count : 0});
+      $(this.el).prepend(data);
     }
   });
 

@@ -1,9 +1,10 @@
 define([
   'backbone',
+  'views/dashboard',
   'views/main',
   'views/search',
   'views/photoList'
-], function(Backbone, MainView, SearchView, PhotoListView) {
+], function(Backbone, DashboardView, MainView, SearchView, PhotoListView) {
 
   var mainView;
 
@@ -26,7 +27,7 @@ define([
         this.navigate('', true);
         return;
       }
-      
+
       mainView
         .transferView()
         .addChildView(new PhotoListView({
@@ -36,7 +37,12 @@ define([
       mainView.childView.render();
     },
     initialize : function() {
-      mainView = new MainView({navigate : this.navigate});
+
+      mainView = new MainView({
+        dashboard : DashboardView,
+        navigate : this.navigate
+      });
+
       Backbone.history.start();
     }
   });

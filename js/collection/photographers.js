@@ -7,7 +7,6 @@ define(['backbone'], function(Backbone) {
       this.tag = options.tagName;
       console.log(this.url);
     },
-    url: 'https://api.instagram.com/v1/tags/'+this.tag+'/media/recent',
     sync : function(method, collection, options) {
       // By setting the dataType to "jsonp", jQuery creates a function
       // and adds it as a callback parameter to the request, e.g.:

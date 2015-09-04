@@ -18,7 +18,7 @@ define([
     render : function() {
       var template = _.template(SearchTemplate);
       var search = template({});
-      $(this.el).prepend(search);
+      $(this.el).append(search);
 
       this.photographers = {
         data: ["everythingeverywhere", "lozula", "elialocardi", "lostncheeseland"]
