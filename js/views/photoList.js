@@ -27,6 +27,20 @@ define([
       var template = _.template(PhotoListTemplate);
       var data = template({_:_, photos : photos, count : 0});
       $(this.el).prepend(data);
+    },
+
+    events : {
+      'click a.like-photo' : 'toggleLike'
+    },
+
+    toggleLike : function(e) {
+      e.preventDefault();
+
+      var that = this,
+          $target = $(e.currentTarget),
+          photo_id = $target.parents(".image-section").attr("data-id");
+      console.log(this.parent.local);
+      console.log(photo_id);
     }
   });
 
