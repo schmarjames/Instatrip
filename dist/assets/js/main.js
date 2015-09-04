@@ -32,8 +32,9 @@ requirejs(['app'], function(App) {
 define([
   'backbone',
   'views/main',
-  'views/search'
-  ], function(Backbone, MainView, SearchView) {
+  'views/search',
+  'views/photoList'
+], function(Backbone, MainView, SearchView, PhotoListView) {
 
   var mainView;
 
@@ -52,11 +53,18 @@ define([
       mainView.childView.render();
     },
     photos : function() {
-      if (mainView.collection == undefined) {
+      if (mainView.collection === undefined) {
         this.navigate('', true);
         return;
       }
-      console.log("PHOTOSSSSSSSSSSSSSSSSSS");
+      
+      mainView
+        .transferView()
+        .addChildView(new PhotoListView({
+          parent : mainView
+        }));
+
+      mainView.childView.render();
     },
     initialize : function() {
       mainView = new MainView({navigate : this.navigate});
@@ -502,11 +510,43 @@ define(['backbone'], function(Backbone) {
       this.childView = child;
     },
 
+    transferView : function() {
+      this.$el.children().fadeOut(500, function(x) {
+        $(this).remove();
+      });
+      return this;
+    },
+
     render : function() {}
   });
 
   return MainView;
 
+});
+
+define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
+  var PhotoList = Backbone.View.extend({
+    el : $("#wrapper"),
+    initialize : function(options) {
+      this.parent = options.parent;
+    },
+
+    render : function() {
+      var photos = [];
+      //console.log(this.parent);
+      this.parent.collection.each(function(model) {
+        var data = model.attributes,
+            obj = {};
+        obj["url"] = data.images.standard_resolution.url;
+        obj["id"] = data.id;
+        photos.push(obj);
+      });
+
+      console.log(photos);
+    }
+  });
+
+  return PhotoList;
 });
 
 define([
@@ -552,7 +592,8 @@ define([
         photographers = new Photographers({tagName : value });
         photographers.url = 'https://api.instagram.com/v1/tags/'+value+'/media/recent?client_id=6c2064d60740476fbe93292ded2d69a7&callback=?';
         photographers.fetch().done(function(data) {
-          that.parent.collection = data;
+          console.log(photographers);
+          that.parent.collection = photographers;
           that.parent.navigate('photos', true);
         });
       }

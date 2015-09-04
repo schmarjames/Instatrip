@@ -13,6 +13,13 @@ define(['backbone'], function(Backbone) {
       this.childView = child;
     },
 
+    transferView : function() {
+      this.$el.children().fadeOut(500, function(x) {
+        $(this).remove();
+      });
+      return this;
+    },
+
     render : function() {}
   });
 

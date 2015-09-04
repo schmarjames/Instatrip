@@ -1,8 +1,9 @@
 define([
   'backbone',
   'views/main',
-  'views/search'
-  ], function(Backbone, MainView, SearchView) {
+  'views/search',
+  'views/photoList'
+], function(Backbone, MainView, SearchView, PhotoListView) {
 
   var mainView;
 
@@ -21,11 +22,18 @@ define([
       mainView.childView.render();
     },
     photos : function() {
-      if (mainView.collection == undefined) {
+      if (mainView.collection === undefined) {
         this.navigate('', true);
         return;
       }
-      console.log("PHOTOSSSSSSSSSSSSSSSSSS");
+      
+      mainView
+        .transferView()
+        .addChildView(new PhotoListView({
+          parent : mainView
+        }));
+
+      mainView.childView.render();
     },
     initialize : function() {
       mainView = new MainView({navigate : this.navigate});

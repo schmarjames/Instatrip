@@ -33,6 +33,9 @@ h1.title {
   border-radius: 5px;
   position: relative;
 }
+#search-form .easy-autocomplete {
+  width: 100% !important;
+}
 
 #search-form #photo-search {
   height: 70px;

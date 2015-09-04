@@ -41,7 +41,8 @@ define([
         photographers = new Photographers({tagName : value });
         photographers.url = 'https://api.instagram.com/v1/tags/'+value+'/media/recent?client_id=6c2064d60740476fbe93292ded2d69a7&callback=?';
         photographers.fetch().done(function(data) {
-          that.parent.collection = data;
+          console.log(photographers);
+          that.parent.collection = photographers;
           that.parent.navigate('photos', true);
         });
       }
