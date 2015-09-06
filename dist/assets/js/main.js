@@ -3,11 +3,10 @@ define([
   ], function(Router) {
 
   var initialize = function() {
-    console.log("app starting");
     var router = new Router();
 
     Backbone.history.on("all", function(x,y) {
-      console.log(Backbone.history.getFragment());
+    //  console.log(Backbone.history.getFragment());
     });
   };
 
@@ -18,10 +17,10 @@ define([
 
 requirejs.config({
   paths : {
-    jquery : '../www/lib/jquery/dist/jquery.min',
-    underscore : '../www/lib/underscore/underscore-min',
-    backbone : '../www/lib/backbone/backbone-min',
-    localstorage : '../www/lib/backbone.localStorage/backbone.localStorage-min',
+    jquery : '../bower_components/jquery/dist/jquery.min',
+    underscore : '../bower_components/underscore/underscore-min',
+    backbone : '../bower_components/backbone/backbone-min',
+    localstorage : '../bower_components/backbone.localStorage/backbone.localStorage',
     autocomplete : '../node_modules/easy-autocomplete/dist/jquery.easy-autocomplete.min'
   }
 });
@@ -44,16 +43,20 @@ define([
   return Backbone.Router.extend({
     routes : {
       ''  : 'search',
-      'photos' : 'photos'
+      'photos' : 'photos',
+      'likedphotos' : 'likedPhotos'
     },
 
     search : function() {
-      mainView.addChildView(new SearchView({
-        parent : mainView
-      }));
+      mainView
+        .transferView()
+        .addChildView(new SearchView({
+          parent : mainView
+        }));
 
       mainView.childView.render();
     },
+
     photos : function() {
       if (mainView.collection === undefined) {
         this.navigate('', true);
@@ -63,11 +66,33 @@ define([
       mainView
         .transferView()
         .addChildView(new PhotoListView({
-          parent : mainView
+          parent : mainView,
+          displayLikes : false
         }));
 
+      mainView.childView.viewState = new Backbone.Model();
+      mainView.childView.viewState.set({'currentPosition' : 0});
       mainView.childView.render();
     },
+
+    likedPhotos : function() {
+      if (mainView.local.collection.localStorage.records.length === 0) {
+        this.navigate('', true);
+        return;
+      }
+
+      mainView
+        .transferView()
+        .addChildView(new PhotoListView({
+          parent : mainView,
+          displayLikes : true
+        }));
+
+      mainView.childView.viewState = new Backbone.Model();
+      mainView.childView.viewState.set({'currentPosition' : 0});
+      mainView.childView.render();
+    },
+
     initialize : function() {
 
       mainView = new MainView({
@@ -474,7 +499,13 @@ define(['module'], function (module) {
 
 define(['backbone', 'localstorage'], function(Backbone, Localstorage) {
   var LocalData = Backbone.Collection.extend({
-    localStorage: new Backbone.LocalStorage("InstatripData")
+    localStorage: new Backbone.LocalStorage("InstatripData"),
+    initialize : function() {
+      var self = this;
+      this.localStorage.findAll().forEach(function(model) {
+        self.add(model);
+      });
+    }
   });
 
   return LocalData;
@@ -485,9 +516,7 @@ define(['backbone'], function(Backbone) {
   var Photographers = Backbone.Collection.extend({
     url : "",
     initialize : function(options) {
-      console.log(options);
       this.tag = options.tagName;
-      console.log(this.url);
     },
     sync : function(method, collection, options) {
       // By setting the dataType to "jsonp", jQuery creates a function
@@ -513,7 +542,10 @@ define(['backbone', 'localstorage'], function(Backbone, Localstorage) {
   var LocalModel = Backbone.Model.extend({
     defaults: function(){
         return {
-            likes : []
+            id : "",
+            url : "",
+            likeStatus : "",
+            likesTotal : ""
         };
     }
   });
@@ -532,15 +564,30 @@ define([
     el : $("#wrapper"),
 
     initialize : function(options) {
-      this.local = options;
+      this.local = options.local;
+      this.navigate = options.navigate;
       this.render();
     },
 
     render : function() {
-      var likesTotal = (this.local.collection.length > 0) ? this.local.collection : 0 ;
-      var template = _.template(DashboardTemplate);
-      var search = template({liketotal : likesTotal});
+      if(this.$el.find("#dashboard").length > 0) { this.$el.find("#dashboard").remove(); }
+      var localRecordsLength = this.local.collection.localStorage.records.length,
+          likesTotal = (localRecordsLength > 0) ? localRecordsLength : 0,
+          template = _.template(DashboardTemplate),
+          search = template({liketotal : likesTotal});
       $(this.el).prepend(search);
+    },
+
+    events : {
+      'click button.like' : 'displayLikedPhotos'
+    },
+
+    displayLikedPhotos : function(e) {
+      e.preventDefault();
+      if (this.local.collection.localStorage.records.length > 0) {
+        this.navigate('likedphotos', true);
+        return;
+      }
     }
   });
 
@@ -565,44 +612,28 @@ define([
 
     initialize : function(options) {
       this.local.collection = new LocalCollection();
-      this.dashboard = new options.dashboard(this.local);
       this.navigate = options.navigate;
+      this.dashboard = new options.dashboard(this);
     },
 
     addChildView : function(child) {
       var dashboard = this.$el.find("#dashboard");
       this.$el.html(dashboard);
       this.childView = child;
+      this.childView.on("likeChange", this.dashboard.render, this);
     },
 
     transferView : function() {
-      this.$el.children().fadeOut(500, function(x) {
-        $(this).remove();
-      });
+      if (this.childView !== null) {
+        this.childView.undelegateEvents();
+        this.childView.stopListening();
+        this.childView.unbind();
+        this.$el.children().not("#dashboard").fadeOut(500, function(x) {
+          $(this).remove();
+
+        });
+      }
       return this;
-    },
-
-    initLocalStorage : function() {
-
-
-      //console.log(col.localStorage._clear());
-      /*col.fetch().done(function(data) {
-        console.log(col.shift());
-        while ((model = col.shift())) {
-          console.log(model);
-          model.destroy();
-        }
-
-      });*/
-
-      /*var model = new LocalModel();
-      console.log(model);
-      col.add(model);
-      model.save();
-
-      col.models.forEach(function(model){
-          console.log("Model in collection: " + model.get("content"));
-      });*/
     },
 
     render : function() {}
@@ -616,31 +647,64 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  '../models/local',
   '../text!../templates/photoList.html'
-  ], function($, _, Backbone, PhotoListTemplate) {
+], function($, _, Backbone, LocalModel, PhotoListTemplate) {
   var PhotoList = Backbone.View.extend({
     el : $("#wrapper"),
     initialize : function(options) {
       this.parent = options.parent;
+      this.displayLikes = options.displayLikes;
+      this.on('likeChange', this.render, this);
     },
 
     render : function() {
-      var photos = [];
-      //console.log(this.parent);
-      this.parent.collection.each(function(model) {
-        var data = model.attributes,
-            obj = {};
-        obj.url = data.images.standard_resolution.url;
-        obj.id = data.id;
-        obj.likesTotal = data.likes.count;
-        photos.push(obj);
-      });
+      this.$el.children().not("#dashboard").remove();
+      var that = this,
+          photos = [];
 
-      console.log(photos);
+      if (this.displayLikes) {
+
+        like_ids = this.parent.local.collection.localStorage.records;
+        like_ids.forEach(function(id, idx) {
+          var model = (that.parent.local.collection.models[idx].attributes !== undefined) ? that.parent.local.collection.models[idx].attributes : that.parent.local.collection.models[idx],
+              obj = that.generatePhotoObj(that.parent.local.collection.models[idx].attributes);
+          obj.index = idx;
+
+          photos.push(obj);
+        });
+      } else {
+        this.parent.collection.each(function(model,idx) {
+          var data = model.attributes, obj;
+          obj = that.generatePhotoObj(data);
+          obj.index = idx;
+          photos.push(obj);
+        });
+      }
 
       var template = _.template(PhotoListTemplate);
       var data = template({_:_, photos : photos, count : 0});
-      $(this.el).prepend(data);
+      this.$el.append(data);
+
+      this.$el.find("#photo-list-wrapper").scrollTop(this.viewState.get('currentPosition'));
+    },
+
+    generatePhotoObj : function(data) {
+      var obj = {};
+      obj.url = (data.images !== undefined) ? data.images.standard_resolution.url : data.url;
+      obj.id = data.id;
+      obj.likeStatus = this.isLiked(data.id);
+      obj.likesTotal = (data.likes !== undefined) ? data.likes.count : data.likesTotal;
+      return obj;
+    },
+
+    isLiked : function (id) {
+      var arr = this.parent.local.collection.localStorage.records;
+
+      for (var i=0; i <= arr.length; i++) {
+        if (arr[i] == id) {  return true; }
+      }
+      return false;
     },
 
     events : {
@@ -652,9 +716,38 @@ define([
 
       var that = this,
           $target = $(e.currentTarget),
-          photo_id = $target.parents(".image-section").attr("data-id");
-      console.log(this.parent.local);
-      console.log(photo_id);
+          $scroller = $target.parents("#photo-list-wrapper"),
+          photo_id = $target.parents(".image-section").attr("data-id"),
+          photo_index = $target.parents(".image-section").attr("data-index");
+
+      // Remove Like
+      if(this.isLiked(photo_id)) {
+        var local = this.parent.local.collection.localStorage;
+
+        this.parent.local.collection.each(function(model) {
+          if(model == undefined) return;
+          if (model.id == photo_id) {
+              local.destroy(model);
+              that.parent.local.collection.remove(model);
+          }
+        });
+
+        this.viewState.set({'currentPosition' : $scroller.scrollTop()});
+        this.trigger('likeChange');
+        if (this.displayLikes && local.records.length === 0) {
+          this.parent.navigate('', true);
+          return;
+        }
+      } else {
+        var model_data = this.parent.collection.models[photo_index].attributes;
+        var model = new LocalModel(this.generatePhotoObj(model_data));
+        this.parent.local.collection.add(model);
+        this.parent.local.collection.localStorage.create(model);
+        this.parent.local.collection.localStorage.save();
+
+        this.viewState.set({'currentPosition' : $scroller.scrollTop()});
+        this.trigger('likeChange');
+      }
     }
   });
 
@@ -679,15 +772,22 @@ define([
     },
 
     render : function() {
-      var template = _.template(SearchTemplate);
-      var search = template({});
-      $(this.el).append(search);
+      var that = this,
+          template = _.template(SearchTemplate),
+          search = template({})
+          $target_fade = (this.$el.children().not("#dashboard").length > 0) ? this.$el.children() : this.$el;
 
-      this.photographers = {
-        data: ["everythingeverywhere", "lozula", "elialocardi", "lostncheeseland"]
-      };
+      $target_fade.not("#dashboard").fadeOut(500, function() {
+        that.$el.append(search);
+        that.photographers = {
+          data: ["everythingeverywhere", "lozula", "elialocardi", "lostncheeseland"]
+        };
 
-      $(this.el).find("#photo-search").easyAutocomplete(this.photographers);
+        $(that.el).find("#photo-search").easyAutocomplete(that.photographers);
+      })
+      .fadeIn(500);
+
+
     },
 
     events: {
@@ -704,7 +804,6 @@ define([
         photographers = new Photographers({tagName : value });
         photographers.url = 'https://api.instagram.com/v1/tags/'+value+'/media/recent?client_id=6c2064d60740476fbe93292ded2d69a7&callback=?';
         photographers.fetch().done(function(data) {
-          console.log(photographers);
           that.parent.collection = photographers;
           that.parent.navigate('photos', true);
         });

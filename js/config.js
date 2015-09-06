@@ -1,9 +1,9 @@
 requirejs.config({
   paths : {
-    jquery : '../www/lib/jquery/dist/jquery.min',
-    underscore : '../www/lib/underscore/underscore-min',
-    backbone : '../www/lib/backbone/backbone-min',
-    localstorage : '../www/lib/backbone.localStorage/backbone.localStorage-min',
+    jquery : '../bower_components/jquery/dist/jquery.min',
+    underscore : '../bower_components/underscore/underscore-min',
+    backbone : '../bower_components/backbone/backbone-min',
+    localstorage : '../bower_components/backbone.localStorage/backbone.localStorage',
     autocomplete : '../node_modules/easy-autocomplete/dist/jquery.easy-autocomplete.min'
   }
 });

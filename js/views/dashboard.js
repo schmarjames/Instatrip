@@ -9,15 +9,30 @@ define([
     el : $("#wrapper"),
 
     initialize : function(options) {
-      this.local = options;
+      this.local = options.local;
+      this.navigate = options.navigate;
       this.render();
     },
 
     render : function() {
-      var likesTotal = (this.local.collection.length > 0) ? this.local.collection : 0 ;
-      var template = _.template(DashboardTemplate);
-      var search = template({liketotal : likesTotal});
+      if(this.$el.find("#dashboard").length > 0) { this.$el.find("#dashboard").remove(); }
+      var localRecordsLength = this.local.collection.localStorage.records.length,
+          likesTotal = (localRecordsLength > 0) ? localRecordsLength : 0,
+          template = _.template(DashboardTemplate),
+          search = template({liketotal : likesTotal});
       $(this.el).prepend(search);
+    },
+
+    events : {
+      'click button.like' : 'displayLikedPhotos'
+    },
+
+    displayLikedPhotos : function(e) {
+      e.preventDefault();
+      if (this.local.collection.localStorage.records.length > 0) {
+        this.navigate('likedphotos', true);
+        return;
+      }
     }
   });
 

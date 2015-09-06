@@ -22,24 +22,19 @@ body {
   color: #efefef;
 }
 
-#dashboard .like-data {
-  position: relative;
-  font-family: 'Croissant One', cursive;
-}
-
 #dashboard .like-data .like {
   position: absolute;
-  right: 2%;
+  right: 0px;
   margin-top: 1px;
   display: block;
-  font-size: 28px
+  font-size: 16px;
 }
 
 #dashboard .like-data .like-num {
   font-size: 28px;
   position: absolute;
   top: 2%;
-  right: 20%;
+  right: 44px;
 }
 
 #dashboard .like-data .like span {
@@ -122,4 +117,8 @@ h1.title {
   right: 4%;
   top: 4%;
   color: red;
+}
+
+.image-section .like.glyphicon-heart-empty {
+  color: #cdcdcd;
 }

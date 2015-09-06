@@ -15,44 +15,28 @@ define([
 
     initialize : function(options) {
       this.local.collection = new LocalCollection();
-      this.dashboard = new options.dashboard(this.local);
       this.navigate = options.navigate;
+      this.dashboard = new options.dashboard(this);
     },
 
     addChildView : function(child) {
       var dashboard = this.$el.find("#dashboard");
       this.$el.html(dashboard);
       this.childView = child;
+      this.childView.on("likeChange", this.dashboard.render, this);
     },
 
     transferView : function() {
-      this.$el.children().fadeOut(500, function(x) {
-        $(this).remove();
-      });
+      if (this.childView !== null) {
+        this.childView.undelegateEvents();
+        this.childView.stopListening();
+        this.childView.unbind();
+        this.$el.children().not("#dashboard").fadeOut(500, function(x) {
+          $(this).remove();
+
+        });
+      }
       return this;
-    },
-
-    initLocalStorage : function() {
-
-
-      //console.log(col.localStorage._clear());
-      /*col.fetch().done(function(data) {
-        console.log(col.shift());
-        while ((model = col.shift())) {
-          console.log(model);
-          model.destroy();
-        }
-
-      });*/
-
-      /*var model = new LocalModel();
-      console.log(model);
-      col.add(model);
-      model.save();
-
-      col.models.forEach(function(model){
-          console.log("Model in collection: " + model.get("content"));
-      });*/
     },
 
     render : function() {}

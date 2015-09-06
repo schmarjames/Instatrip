@@ -12,16 +12,20 @@ define([
   return Backbone.Router.extend({
     routes : {
       ''  : 'search',
-      'photos' : 'photos'
+      'photos' : 'photos',
+      'likedphotos' : 'likedPhotos'
     },
 
     search : function() {
-      mainView.addChildView(new SearchView({
-        parent : mainView
-      }));
+      mainView
+        .transferView()
+        .addChildView(new SearchView({
+          parent : mainView
+        }));
 
       mainView.childView.render();
     },
+
     photos : function() {
       if (mainView.collection === undefined) {
         this.navigate('', true);
@@ -31,11 +35,33 @@ define([
       mainView
         .transferView()
         .addChildView(new PhotoListView({
-          parent : mainView
+          parent : mainView,
+          displayLikes : false
         }));
 
+      mainView.childView.viewState = new Backbone.Model();
+      mainView.childView.viewState.set({'currentPosition' : 0});
       mainView.childView.render();
     },
+
+    likedPhotos : function() {
+      if (mainView.local.collection.localStorage.records.length === 0) {
+        this.navigate('', true);
+        return;
+      }
+
+      mainView
+        .transferView()
+        .addChildView(new PhotoListView({
+          parent : mainView,
+          displayLikes : true
+        }));
+
+      mainView.childView.viewState = new Backbone.Model();
+      mainView.childView.viewState.set({'currentPosition' : 0});
+      mainView.childView.render();
+    },
+
     initialize : function() {
 
       mainView = new MainView({

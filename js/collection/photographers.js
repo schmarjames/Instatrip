@@ -3,9 +3,7 @@ define(['backbone'], function(Backbone) {
   var Photographers = Backbone.Collection.extend({
     url : "",
     initialize : function(options) {
-      console.log(options);
       this.tag = options.tagName;
-      console.log(this.url);
     },
     sync : function(method, collection, options) {
       // By setting the dataType to "jsonp", jQuery creates a function
