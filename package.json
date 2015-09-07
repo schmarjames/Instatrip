@@ -7,7 +7,8 @@
     "bower": "~1.5.2",
     "bower-requirejs": "~1.2.0",
     "easy-autocomplete": "^1.1.4",
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "path": "^0.11.14"
   },
   "devDependencies": {
     "del": "^2.0.0",
