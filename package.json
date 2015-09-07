@@ -8,6 +8,7 @@
     "bower-requirejs": "~1.2.0",
     "easy-autocomplete": "^1.1.4",
     "express": "^4.13.3",
+    "gulp": "^3.9.0",
     "path": "^0.11.14"
   },
   "devDependencies": {
