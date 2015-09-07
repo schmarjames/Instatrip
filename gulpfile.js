@@ -35,10 +35,10 @@ var cors = function (req, res, next) {
     gulp.task('copy-ness', function() {
        return gulp.src([
              'bower_component/jquery/*.js',
-             'bower_component/underscore/*.js,
-             'bower_component/backbone/*.js,
-	     'bower_component/backbone.localStorage/*.js,
-	     'node_modules/easy-autocomplete/dist/*.js, 
+             'bower_component/underscore/*.js',
+             'bower_component/backbone/*.js',
+	     'bower_component/backbone.localStorage/*.js',
+	     'node_modules/easy-autocomplete/dist/*.js', 
              'www/lib/bootstrap/dist/css/*.css', 
              'www/lib/jquery/dist/*.js',
              'www/lib/requirejs/*.js'
