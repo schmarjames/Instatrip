@@ -1,5 +1,5 @@
-var gulp = require('gulp'),
-    sass = require('gulp-ruby-sass'),
+var gulp = require('gulp');
+    /*sass = require('gulp-ruby-sass'),
     autoprefixer = require('gulp-autoprefixer'),
     minifycss = require('gulp-minify-css'),
     jshint = require('gulp-jshint'),
@@ -11,7 +11,7 @@ var gulp = require('gulp'),
     cache = require('gulp-cache'),
     livereload = require('gulp-livereload'),
     del = require('del'),
-    connect = require('gulp-connect');
+    connect = require('gulp-connect');*/
 
 var cors = function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
