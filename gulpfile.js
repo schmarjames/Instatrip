@@ -38,7 +38,8 @@ var cors = function (req, res, next) {
              'bower_components/underscore/*.js',
              'bower_components/backbone/*.js',
 	     'bower_components/backbone.localStorage/*.js',
-	     'node_modules/easy-autocomplete/dist/*.js', 
+	     'node_modules/easy-autocomplete/dist/*.js',
+	     'node_modules/easy-autocomplete/dist/*.css', 
              'www/lib/bootstrap/dist/css/*.css', 
              'www/lib/jquery/dist/*.js',
              'www/lib/requirejs/*.js'
