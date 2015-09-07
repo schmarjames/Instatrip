@@ -32,6 +32,20 @@ var cors = function (req, res, next) {
         .pipe(connect.reload());
     });
 
+    gulp.task('copy-ness', function() {
+       return gulp.src([
+             'bower_component/jquery/*.js',
+             'bower_component/underscore/*.js,
+             'bower_component/backbone/*.js,
+	     'bower_component/backbone.localStorage/*.js,
+	     'node_modules/easy-autocomplete/dist/*.js, 
+             'www/lib/bootstrap/dist/css/*.css', 
+             'www/lib/jquery/dist/*.js',
+             'www/lib/requirejs/*.js'
+          ])
+          .pipe(gulp.dest('./public/scripts'));
+    });
+
     gulp.task('clean', function(cb) {
         del(['dist/assets/js'], cb)
     });
@@ -46,10 +60,15 @@ var cors = function (req, res, next) {
       });
     });
 
-    // Default task
-    gulp.task('default', ['clean', 'connect', 'watch'], function() {
-        gulp.start('scripts');
+    // Production default task
+    gulp.task('default', function() {
+        gulp.start('copy-ness');
     });
+
+    // Default task
+    /*gulp.task('default', ['clean', 'connect', 'watch'], function() {
+        gulp.start('scripts');
+    });*/
 
     gulp.task('watch', function() {
 
