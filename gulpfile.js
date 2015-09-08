@@ -47,6 +47,11 @@ var cors = function (req, res, next) {
           .pipe(gulp.dest('./public/scripts'));
     });
 
+    gulp.task('copy-fonts', function() {
+        return gulp.src('www/lib/bootstrap/dist/fonts/**')
+	   .pipe(gulp.dest('./public/fonts'));
+    });
+
     gulp.task('clean', function(cb) {
         del(['dist/assets/js'], cb)
     });
@@ -61,15 +66,10 @@ var cors = function (req, res, next) {
       });
     });
 
-    // Production default task
-    gulp.task('default', function() {
-        gulp.start('copy-ness');
-    });
-
     // Default task
-    /*gulp.task('default', ['clean', 'connect', 'watch'], function() {
+    gulp.task('default', ['clean', 'connect', 'watch'], function() {
         gulp.start('scripts');
-    });*/
+    });
 
     gulp.task('watch', function() {
 
