@@ -122,3 +122,9 @@ h1.title {
 .image-section .like.glyphicon-heart-empty {
   color: #cdcdcd;
 }
+
+@media (max-width: 480px) {
+   #search-form {
+     width: 100%;
+   }
+}
