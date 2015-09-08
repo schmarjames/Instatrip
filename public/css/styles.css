@@ -123,7 +123,7 @@ h1.title {
   color: #cdcdcd;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
    #search-form {
      width: 100%;
    }
