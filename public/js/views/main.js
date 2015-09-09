@@ -43,7 +43,7 @@ define([
       var that = this;
       if (on) {
         this.$el.children().fadeOut(200, function() {
-          this.parents("body").prepend('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
+          $("body").prepend('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
         });
 
       } /*else {
