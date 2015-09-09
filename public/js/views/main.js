@@ -46,12 +46,12 @@ define([
           that.$el.prepend('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
         });
 
-      } else {
+      } /*else {
         this.$el
           .remove(".glyphicon-refresh-animate")
           .children()
           .fadeIn(200);
-      }
+      }*/
     },
 
     render : function() {}
