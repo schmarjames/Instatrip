@@ -39,6 +39,20 @@ define([
       return this;
     },
 
+    toggleLoad : function(on) {
+      if (on) {
+        this.$el.children().fadeOut(200, function() {
+          this.$el.prepend('<span class="glyphicon-refresh-animate"></span>');
+        });
+
+      } else {
+        this.$el
+          .remove(".glyphicon-refresh-animate")
+          .children()
+          .fadeIn(200);
+      }
+    },
+
     render : function() {}
   });
 
