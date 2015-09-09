@@ -42,7 +42,7 @@ define([
     toggleLoad : function(on) {
       var that = this;
       if (on) {
-        $("body").children().fadeOut(200, function() {
+        this.$el.children().fadeOut(200, function() {
           this.parents("body").prepend('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
         });
 
