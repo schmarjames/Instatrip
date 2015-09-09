@@ -51,6 +51,7 @@ define([
         photographers.fetch().done(function(data) {
           that.parent.collection = photographers;
           that.parent.navigate('photos', true);
+          that.parent.toggleLoad(false);
         });
       }
 
