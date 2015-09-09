@@ -122,10 +122,12 @@ h1.title {
 .image-section .like.glyphicon-heart-empty {
   color: #cdcdcd;
 }
+.glyphicon.glyphicon-refresh-animate {
+  font-size: 60px;
+  color: #346;
+}
 
 .glyphicon-refresh-animate {
-    width: 10%;
-    height: 10%;
     position : absolute;
     top: 45%;
     left: 45%;

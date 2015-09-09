@@ -42,8 +42,8 @@ define([
     toggleLoad : function(on) {
       var that = this;
       if (on) {
-        this.$el.children().fadeOut(200, function() {
-          that.$el.prepend('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
+        $("body").children().fadeOut(200, function() {
+          this.parents("body").prepend('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
         });
 
       } /*else {
