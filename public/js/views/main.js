@@ -48,6 +48,7 @@ define([
 
       } else {
         $("body .glyphicon-refresh-animate").remove();
+        console.log('REMOVINGGGGGGGGGGGG');
         this.$el.children().fadeIn(200);
       }
     },
