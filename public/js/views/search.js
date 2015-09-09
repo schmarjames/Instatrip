@@ -46,13 +46,13 @@ define([
           value = $target.parent().find("#photo-search").val();
       if (this.photographers.data.indexOf(value) > -1) {
         this.parent.toggleLoad(true);
-        photographers = new Photographers({tagName : value });
+        /*photographers = new Photographers({tagName : value });
         photographers.url = 'https://api.instagram.com/v1/tags/'+value+'/media/recent?client_id=6c2064d60740476fbe93292ded2d69a7&callback=?';
         photographers.fetch().done(function(data) {
           that.parent.collection = photographers;
           that.parent.navigate('photos', true);
           that.parent.toggleLoad(false);
-        });
+        });*/
       }
 
     }
