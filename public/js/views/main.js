@@ -46,12 +46,13 @@ define([
           $("body").prepend('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
         });
 
-      } /*else {
-        this.$el
+      } else {
+        $("body")
           .remove(".glyphicon-refresh-animate")
+          .find(this.el)
           .children()
           .fadeIn(200);
-      }*/
+      }
     },
 
     render : function() {}

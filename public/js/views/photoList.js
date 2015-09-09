@@ -35,6 +35,7 @@ define([
           obj.index = idx;
           photos.push(obj);
         });
+        this.parent.toggleLoad(false);
       }
 
       var template = _.template(PhotoListTemplate);
