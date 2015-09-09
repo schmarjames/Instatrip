@@ -130,7 +130,7 @@ h1.title {
 .glyphicon-refresh-animate {
     position : absolute;
     top: 45%;
-    left: 45%;
+    left: 48%;
     -animation: spin .7s infinite linear;
     -webkit-animation: spin2 .7s infinite linear;
 }

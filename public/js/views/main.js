@@ -47,11 +47,8 @@ define([
         });
 
       } else {
-        $("body")
-          .remove(".glyphicon-refresh-animate")
-          .find(this.el)
-          .children()
-          .fadeIn(200);
+        $("body .glyphicon-refresh-animate").remove();
+        this.$el.children().fadeIn(200);
       }
     },
 
