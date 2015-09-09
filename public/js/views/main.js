@@ -40,9 +40,10 @@ define([
     },
 
     toggleLoad : function(on) {
+      var that = this;
       if (on) {
         this.$el.children().fadeOut(200, function() {
-          this.$el.prepend('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
+          that.$el.prepend('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
         });
 
       } else {
