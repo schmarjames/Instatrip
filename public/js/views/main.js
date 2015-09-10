@@ -47,7 +47,7 @@ define([
         });
 
       } else {
-        $(".glyphicon-refresh-animate").remove();
+        $(".glyphicon.glyphicon-refresh-animate").remove();
         console.log('REMOVINGGGGGGGGGGGG');
         this.$el.children().fadeIn(200);
       }
